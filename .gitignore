@@ -1,4 +1,4 @@
-# Python ignores
+# Python
 __pycache__/
 *.pyc
 *.pyo
@@ -10,16 +10,17 @@ venv/
 .venv/
 env/
 .env
+*.env
 backend/app.db
 backend/test.db
 
-# Node/React ignores
+# Node/React
 node_modules/
 dist/
 .vite/
 .eslintcache
 
-# Local editor settings
+# Editor
 .vscode/
 .idea/
 *.suo
