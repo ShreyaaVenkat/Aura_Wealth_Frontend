@@ -567,208 +567,234 @@ export default function App() {
   // Authentication View
   if (!token) {
     return (
-      <div className="auth-wrapper">
-        <div className="glass-panel auth-card">
-          <div className="auth-header">
-            <span className="brand-logo" style={{ marginBottom: '12px' }}>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans text-slate-900">
+        <div className="bg-white p-8 rounded-2xl shadow-floating max-w-md w-full border border-slate-200">
+          <div className="text-center mb-8">
+            <span className="inline-block text-slate-900 mb-4">
               <DiamondIcon />
             </span>
-            <h2>AuraWealth</h2>
-            <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontSize: '13px' }}>
-              {isLoginView ? 'Welcome back! Sign in to analyze your assets.' : 'Create an account to start wealth planning.'}
+            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">AuraWealth</h2>
+            <p className="text-slate-500 mt-2 text-sm">
+              {isLoginView ? 'Sign in to access your wealth dashboard.' : 'Create an account to start wealth planning.'}
             </p>
           </div>
-          <form onSubmit={handleAuth}>
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
+          <form onSubmit={handleAuth} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
               <input
                 type="email"
-                className="input-field"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:border-slate-900 outline-none transition-all text-sm"
                 placeholder="you@example.com"
                 value={authEmail}
                 onChange={(e) => setAuthEmail(e.target.value)}
                 required
               />
             </div>
-            <div className="form-group">
-              <label className="form-label">Password</label>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
               <input
                 type="password"
-                className="input-field"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:border-slate-900 outline-none transition-all text-sm"
                 placeholder="••••••••"
                 value={authPassword}
                 onChange={(e) => setAuthPassword(e.target.value)}
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-              {isLoginView ? 'Sign In' : 'Get Started'}
+            <button type="submit" className="w-full bg-slate-900 text-white rounded-lg px-4 py-3 text-sm font-bold tracking-wide hover:bg-slate-800 transition-colors shadow-md">
+              {isLoginView ? 'Access Account' : 'Open Account'}
             </button>
           </form>
-          <div className="auth-toggle">
+          <div className="mt-8 text-center text-sm text-slate-500">
             {isLoginView ? (
-              <p>Don't have an account? <span onClick={() => setIsLoginView(false)}>Sign Up</span></p>
+              <p>New to AuraWealth? <span className="text-slate-900 font-bold cursor-pointer hover:underline" onClick={() => setIsLoginView(false)}>Apply Now</span></p>
             ) : (
-              <p>Already have an account? <span onClick={() => setIsLoginView(true)}>Sign In</span></p>
+              <p>Already a client? <span className="text-slate-900 font-bold cursor-pointer hover:underline" onClick={() => setIsLoginView(true)}>Sign In</span></p>
             )}
           </div>
         </div>
-        {toast.message && <div className={`toast ${toast.type}`}>{toast.message}</div>}
+        {toast.message && (
+          <div className={`fixed bottom-6 right-6 px-6 py-4 rounded-xl shadow-floating text-sm font-bold text-white ${toast.type === 'error' ? 'bg-rose-600' : 'bg-emerald-600'}`}>
+            {toast.message}
+          </div>
+        )}
       </div>
     );
   }
 
-  // Dashboard Layout
   return (
-    <div className="app-container">
-      {/* Sidebar Navigation */}
-      <aside className="sidebar">
-        <div className="brand-container">
-          <DiamondIcon />
-          <span className="brand-name">AuraWealth</span>
-        </div>
-
-        <ul className="nav-menu">
-          <li className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
-            <span className="nav-icon"><DashboardIcon /></span>
-            <span className="nav-text">Dashboard</span>
-          </li>
-          <li className={`nav-item ${activeTab === 'transactions' ? 'active' : ''}`} onClick={() => setActiveTab('transactions')}>
-            <span className="nav-icon"><TransactionsIcon /></span>
-            <span className="nav-text">Transactions</span>
-          </li>
-          <li className={`nav-item ${activeTab === 'budgets' ? 'active' : ''}`} onClick={() => setActiveTab('budgets')}>
-            <span className="nav-icon"><BudgetsIcon /></span>
-            <span className="nav-text">Budgets</span>
-          </li>
-          <li className={`nav-item ${activeTab === 'goals' ? 'active' : ''}`} onClick={() => setActiveTab('goals')}>
-            <span className="nav-icon"><GoalsIcon /></span>
-            <span className="nav-text">Goals</span>
-          </li>
-          <li className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
-            <span className="nav-icon"><RiskProfileIcon /></span>
-            <span className="nav-text">Risk Profile</span>
-          </li>
-        </ul>
-
-        <div className="user-badge">
-          <div className="user-avatar">{email.charAt(0).toUpperCase()}</div>
-          <div className="user-info">
-            <div className="user-email">{email}</div>
-            <div className="user-status">Aura Pro User</div>
+    <div className="min-h-screen bg-slate-50 flex font-sans text-slate-900 overflow-hidden">
+      {/* Premium Dark Sidebar */}
+      <aside className="w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between h-screen shrink-0 relative z-20 shadow-2xl">
+        <div>
+          <div className="p-8 flex items-center gap-4 border-b border-slate-800">
+            <span className="text-white"><DiamondIcon /></span>
+            <span className="font-extrabold text-xl tracking-tight text-white">AuraWealth</span>
           </div>
-          <button className="btn-logout" onClick={handleLogout} title="Sign Out">
+          <div className="px-4 py-6 space-y-2">
+            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-4">Platform</div>
+            
+            <li className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 list-none ${activeTab === 'dashboard' ? 'bg-slate-800 text-white font-semibold border-l-2 border-blue-500' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`} onClick={() => setActiveTab('dashboard')}>
+              <DashboardIcon /> <span className="text-sm tracking-wide">Dashboard</span>
+            </li>
+            <li className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 list-none ${activeTab === 'transactions' ? 'bg-slate-800 text-white font-semibold border-l-2 border-blue-500' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`} onClick={() => setActiveTab('transactions')}>
+              <TransactionsIcon /> <span className="text-sm tracking-wide">Transactions</span>
+            </li>
+            <li className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 list-none ${activeTab === 'budgets' ? 'bg-slate-800 text-white font-semibold border-l-2 border-blue-500' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`} onClick={() => setActiveTab('budgets')}>
+              <BudgetsIcon /> <span className="text-sm tracking-wide">Budgets</span>
+            </li>
+            <li className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 list-none ${activeTab === 'goals' ? 'bg-slate-800 text-white font-semibold border-l-2 border-blue-500' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`} onClick={() => setActiveTab('goals')}>
+              <GoalsIcon /> <span className="text-sm tracking-wide">Goals</span>
+            </li>
+            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mt-8 mb-4">Advisory</div>
+            <li className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 list-none ${activeTab === 'profile' ? 'bg-slate-800 text-white font-semibold border-l-2 border-blue-500' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`} onClick={() => setActiveTab('profile')}>
+              <RiskProfileIcon /> <span className="text-sm tracking-wide">Risk Profile</span>
+            </li>
+          </div>
+        </div>
+        <div className="p-4 m-6 bg-slate-800 rounded-xl border border-slate-700 flex items-center justify-between hover:bg-slate-700 transition-colors cursor-default">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-10 h-10 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-sm shrink-0 border border-slate-600">{email.charAt(0).toUpperCase()}</div>
+            <div className="overflow-hidden">
+              <div className="text-sm font-bold text-white truncate">{email}</div>
+              <div className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mt-1">Aura Pro</div>
+            </div>
+          </div>
+          <button className="text-slate-400 hover:text-rose-500 transition-colors p-2 rounded-lg hover:bg-slate-800" onClick={handleLogout} title="Sign Out">
             <LogoutIcon />
           </button>
         </div>
       </aside>
 
       {/* Main View Area */}
-      <main className={`main-content ${isChatOpen ? 'ai-open' : ''}`}>
-        <header className="dashboard-header">
-          <div className="header-title">
-            <h1>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Dashboard</h1>
-            <p>Welcome back, AuraWealth helps you optimize savings velocity.</p>
+      <main className="flex-1 h-screen overflow-y-auto p-8 lg:p-12 scroll-smooth relative z-10">
+        <header className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+          <div>
+            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
+            <p className="text-slate-500 text-sm mt-2 font-medium">Welcome back. Here is your aggregated wealth summary.</p>
           </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button onClick={compileAdvisory} disabled={isCompiling} className="btn btn-secondary">
-              <SparklesIcon /> {isCompiling ? 'Analyzing Graph...' : 'Sync AI Advice'}
+          <div className="flex items-center gap-4">
+            <button onClick={compileAdvisory} disabled={isCompiling} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-sm text-sm font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-50">
+              <SparklesIcon /> {isCompiling ? 'Analyzing...' : 'Sync AI Advice'}
             </button>
-            <button onClick={() => setIsChatOpen(!isChatOpen)} className="btn btn-primary">
+            <button onClick={() => setIsChatOpen(!isChatOpen)} className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow-sm text-sm font-bold hover:bg-blue-700 transition-all hover:shadow-md">
               <ChatIcon /> {isChatOpen ? 'Close Assistant' : 'Ask AI Advisor'}
             </button>
           </div>
         </header>
 
-        {/* Global Toast */}
-        {toast.message && <div className={`toast ${toast.type}`}>{toast.message}</div>}
+        {toast.message && (
+          <div className={`fixed bottom-6 right-6 px-6 py-4 rounded-xl shadow-floating text-sm font-bold text-white z-50 ${toast.type === 'error' ? 'bg-rose-600' : 'bg-emerald-600'}`}>
+            {toast.message}
+          </div>
+        )}
 
-        {/* Dynamic Tab Switcher */}
         {activeTab === 'dashboard' && (
-          <div>
-            {/* Top metrics row */}
-            <div className="dashboard-grid">
-              <div className="glass-panel metric-card">
-                <div className="metric-label">Monthly Inflows</div>
-                <div className="metric-value">${totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                <div className="metric-change positive">Active Payroll surplus</div>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-4 relative z-10">Monthly Inflows</div>
+                <div className="text-4xl font-extrabold text-slate-900 tabular-nums mb-3 tracking-tight relative z-10">${totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-[11px] font-bold inline-flex items-center px-2.5 py-1 rounded-md w-max bg-emerald-50 text-emerald-600 relative z-10"><TrendingUpIcon /> Active Payroll</div>
               </div>
-              <div className="glass-panel metric-card">
-                <div className="metric-label">Monthly Spending</div>
-                <div className="metric-value">${totalExpense.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                <div className="metric-change negative">Capital outflows</div>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-rose-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-4 relative z-10">Monthly Spending</div>
+                <div className="text-4xl font-extrabold text-slate-900 tabular-nums mb-3 tracking-tight relative z-10">${totalExpense.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-[11px] font-bold inline-flex items-center px-2.5 py-1 rounded-md w-max bg-rose-50 text-rose-600 relative z-10">Capital outflows</div>
               </div>
-              <div className="glass-panel metric-card">
-                <div className="metric-label">Net Monthly Savings</div>
-                <div className="metric-value">${netSavings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                <div className="metric-change positive">Surplus margin</div>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-4 relative z-10">Net Savings</div>
+                <div className="text-4xl font-extrabold text-slate-900 tabular-nums mb-3 tracking-tight relative z-10">${netSavings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-[11px] font-bold inline-flex items-center px-2.5 py-1 rounded-md w-max bg-blue-50 text-blue-600 relative z-10">Surplus margin</div>
               </div>
-              <div className="glass-panel metric-card">
-                <div className="metric-label">Savings Velocity</div>
-                <div className="metric-value">{savingsRate.toFixed(1)}%</div>
-                <div className={`metric-change ${savingsRate >= 20 ? 'positive' : 'negative'}`}>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-4 relative z-10">Savings Velocity</div>
+                <div className="text-4xl font-extrabold text-slate-900 tabular-nums mb-3 tracking-tight relative z-10">{savingsRate.toFixed(1)}%</div>
+                <div className={`text-[11px] font-bold inline-flex items-center px-2.5 py-1 rounded-md w-max relative z-10 ${savingsRate >= 20 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
                   Target benchmark: 20%
                 </div>
               </div>
             </div>
 
-            <div className="content-grid">
-              {/* Chart Visualizer */}
-              <div className="glass-panel">
-                <div className="panel-title">Expense Category Breakdown</div>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+              <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div className="text-lg font-extrabold text-slate-900 mb-8 tracking-tight">Expense Analytics</div>
                 {Object.keys(expenseCategories).length === 0 ? (
-                  <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>No expense transactions recorded. Add data to visualize category outflows.</p>
+                  <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+                    <p className="text-sm font-medium">No expense transactions recorded.</p>
+                  </div>
                 ) : (
-                  <div className="chart-bar-container">
-                    {Object.entries(expenseCategories).map(([cat, val]) => (
-                      <div className="chart-bar-col" key={cat}>
-                        <div
-                          className="chart-bar-rect"
-                          style={{ height: `${(val / maxCategoryValue) * 140}px` }}
-                        ></div>
-                        <div className="chart-bar-label">
-                          <strong>${val.toFixed(0)}</strong>
-                          <br />
-                          {cat}
+                  <div className="flex items-end gap-3 mt-4" style={{ height: '248px' }}>
+                    {Object.entries(expenseCategories).map(([cat, val], idx) => {
+                      const palette = ['#3B82F6','#6366F1','#8B5CF6','#A855F7','#EC4899','#F43F5E','#14B8A6'];
+                      const barColor = palette[idx % palette.length];
+                      const barHeight = Math.max((val / maxCategoryValue) * 200, 8);
+                      const label = val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val.toFixed(0);
+                      return (
+                        <div className="flex-1 flex flex-col justify-end items-center group" key={cat}>
+                          <div className="text-[10px] font-bold text-slate-600 mb-1.5 tabular-nums opacity-80 group-hover:opacity-100 transition-opacity">
+                            {'$'}{label}
+                          </div>
+                          <div
+                            className="w-full rounded-t-md shadow-sm cursor-default"
+                            style={{
+                              height: barHeight + 'px',
+                              backgroundColor: barColor,
+                              transition: 'height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease',
+                              opacity: 0.85,
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.85'; }}
+                          />
+                          <div className="text-[9px] font-semibold text-slate-400 text-center mt-2 truncate w-full leading-tight">
+                            {cat}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
 
-              {/* Quick AI advice overview */}
-              <div className="glass-panel">
-                <div className="panel-title">Advisor Status</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div style={{ background: 'var(--bg-dark)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase' }}>Asset Risk profile</div>
-                    <div style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '6px', color: 'var(--primary)' }}>{profile.risk_tolerance} Allocation</div>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col">
+                <div className="text-lg font-extrabold text-slate-900 mb-8 tracking-tight">Advisory Status</div>
+                <div className="space-y-6 flex-1">
+                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <div className="text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-2">Asset Risk Profile</div>
+                    <div className="text-xl font-extrabold text-slate-900">{profile.risk_tolerance} Allocation</div>
                   </div>
-                  <div style={{ background: 'var(--bg-dark)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase' }}>Budget Compliance</div>
-                    <div style={{ fontSize: '18px', fontWeight: 'bold', marginTop: '6px', color: 'var(--accent-emerald)' }}>
-                      {budgets.length > 0 ? `${budgets.length} Categories Monitored` : 'No Active Budgets'}
+                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <div className="text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-2">Budget Compliance</div>
+                    <div className="text-xl font-extrabold text-emerald-600">
+                      {budgets.length > 0 ? `${budgets.length} Monitored` : 'No Budgets'}
                     </div>
                   </div>
-                  <button onClick={() => { setActiveTab('profile'); }} className="btn btn-secondary" style={{ width: '100%' }}>Update Financial Stats</button>
                 </div>
+                <button onClick={() => setActiveTab('profile')} className="mt-6 w-full px-4 py-3 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                  Review Risk Settings
+                </button>
               </div>
             </div>
 
-            {/* Core Advisor Report compiler output */}
-            <div className="glass-panel" style={{ marginTop: '24px' }}>
-              <div className="panel-title">
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><SparklesIcon /> Compiled Wealth Advice Report</span>
-                <span style={{ fontSize: '11px', fontWeight: '500', color: 'var(--text-muted)' }}>LangGraph State Output</span>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+              <div className="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-900"><SparklesIcon /></span>
+                  <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">Wealth Advisory Report</h3>
+                </div>
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-400">AI Synthesis</span>
               </div>
               {advisorReport ? (
-                <div className="advisor-report-container" dangerouslySetInnerHTML={{ __html: parseMarkdown(advisorReport) }} />
+                <div className="prose prose-slate max-w-none prose-headings:font-extrabold prose-h3:text-lg prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-li:text-slate-600" dangerouslySetInnerHTML={{ __html: parseMarkdown(advisorReport) }} />
               ) : (
-                <div style={{ textAlign: 'center', padding: '40px' }}>
-                  <p style={{ color: 'var(--text-secondary)', marginBottom: '16px', fontSize: '14px' }}>No advice compiled. Trigger the LangGraph multi-agent analyzer to synthesize your financial data.</p>
-                  <button onClick={compileAdvisory} className="btn btn-primary" disabled={isCompiling}>
-                    {isCompiling ? 'Running AI Engine...' : 'Run LangGraph Multi-Agent Analysis'}
+                <div className="text-center py-16">
+                  <p className="text-slate-500 text-sm font-medium mb-6">No advisory report compiled. Trigger the intelligence engine to synthesize your data.</p>
+                  <button onClick={compileAdvisory} className="px-6 py-3 bg-slate-900 text-white rounded-lg shadow-md text-sm font-bold hover:bg-slate-800 transition-colors" disabled={isCompiling}>
+                    {isCompiling ? 'Engine Running...' : 'Generate Wealth Report'}
                   </button>
                 </div>
               )}
@@ -777,124 +803,89 @@ export default function App() {
         )}
 
         {activeTab === 'transactions' && (
-          <div className="content-grid">
-            {/* Input Form */}
-            <div className="glass-panel">
-              <div className="panel-title">Add Transaction</div>
-              <form onSubmit={addTransaction}>
-                <div className="form-group">
-                  <label className="form-label">Transaction Type</label>
-                  <select
-                    className="input-field"
-                    value={newTx.type}
-                    onChange={(e) => setNewTx({ ...newTx, type: e.target.value })}
-                  >
-                    <option value="expense">Expense (Outflow)</option>
-                    <option value="income">Income (Inflow)</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Amount ($)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    className="input-field"
-                    placeholder="9.99"
-                    value={newTx.amount}
-                    onChange={(e) => setNewTx({ ...newTx, amount: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Category</label>
-                  <select
-                    className="input-field"
-                    value={newTx.category}
-                    onChange={(e) => setNewTx({ ...newTx, category: e.target.value })}
-                  >
-                    <option value="Housing">Housing (Rent/Mortgage)</option>
-                    <option value="Groceries">Groceries</option>
-                    <option value="Dining Out">Dining Out</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Subscriptions">Subscriptions</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Income">Salary / Income</option>
-                    <option value="Shopping">Shopping & Discretionary</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Date</label>
-                  <input
-                    type="date"
-                    className="input-field"
-                    value={newTx.date}
-                    onChange={(e) => setNewTx({ ...newTx, date: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Description (Encrypted at rest)</label>
-                  <input
-                    type="text"
-                    className="input-field"
-                    placeholder="e.g. Rent Payment, Starbucks Coffee"
-                    value={newTx.description}
-                    onChange={(e) => setNewTx({ ...newTx, description: e.target.value })}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Add Transaction</button>
-              </form>
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="xl:col-span-1 space-y-8">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div className="text-lg font-extrabold text-slate-900 mb-6 tracking-tight">Record Transaction</div>
+                <form onSubmit={addTransaction} className="space-y-5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Type</label>
+                    <select className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={newTx.type} onChange={(e) => setNewTx({ ...newTx, type: e.target.value })}>
+                      <option value="expense">Expense (Outflow)</option>
+                      <option value="income">Income (Inflow)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Amount ($)</label>
+                    <input type="number" step="0.01" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" placeholder="0.00" value={newTx.amount} onChange={(e) => setNewTx({ ...newTx, amount: e.target.value })} required />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Category</label>
+                    <select className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={newTx.category} onChange={(e) => setNewTx({ ...newTx, category: e.target.value })}>
+                      <option value="Housing">Housing</option>
+                      <option value="Groceries">Groceries</option>
+                      <option value="Dining Out">Dining Out</option>
+                      <option value="Transport">Transport</option>
+                      <option value="Subscriptions">Subscriptions</option>
+                      <option value="Entertainment">Entertainment</option>
+                      <option value="Income">Salary / Income</option>
+                      <option value="Shopping">Shopping & Discretionary</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Date</label>
+                    <input type="date" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={newTx.date} onChange={(e) => setNewTx({ ...newTx, date: e.target.value })} required />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Description</label>
+                    <input type="text" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" placeholder="e.g. Starbucks" value={newTx.description} onChange={(e) => setNewTx({ ...newTx, description: e.target.value })} required />
+                  </div>
+                  <button type="submit" className="w-full bg-slate-900 text-white rounded-lg px-4 py-3 text-sm font-bold hover:bg-slate-800 transition-colors shadow-sm mt-4 tracking-wide">Record Transaction</button>
+                </form>
+              </div>
 
-              {/* CSV Upload */}
-              <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border-subtle)' }}>
-                <div className="panel-title" style={{ fontSize: '15px', marginBottom: '8px' }}>Import CSV Statements</div>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.4' }}>
-                  Upload a standard bank statement. Expected columns: <code>amount, category, date (YYYY-MM-DD), type, description</code>
-                </p>
-                <input
-                  type="file"
-                  accept=".csv"
-                  style={{ display: 'none' }}
-                  ref={fileInputRef}
-                  onChange={handleCSVUpload}
-                />
-                <button onClick={() => fileInputRef.current.click()} className="btn btn-secondary" style={{ width: '100%' }}>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div className="text-sm font-extrabold text-slate-900 mb-3 tracking-tight">Bulk Import</div>
+                <p className="text-xs text-slate-500 mb-6 leading-relaxed font-medium">Upload statements. Expected columns: amount, category, date, type, description</p>
+                <input type="file" accept=".csv" className="hidden" ref={fileInputRef} onChange={handleCSVUpload} />
+                <button onClick={() => fileInputRef.current.click()} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-lg shadow-sm text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors">
                   <UploadIcon /> Choose CSV File
                 </button>
               </div>
             </div>
 
-            {/* List Table */}
-            <div className="glass-panel">
-              <div className="panel-title">Transaction Log</div>
-              {transactions.length === 0 ? (
-                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>No transactions recorded.</p>
-              ) : (
-                <div className="table-container">
-                  <table className="custom-table">
-                    <thead>
+            <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-[calc(100vh-12rem)]">
+              <div className="p-8 border-b border-slate-200 bg-white sticky top-0 z-10">
+                <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">Ledger</h3>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                {transactions.length === 0 ? (
+                  <div className="flex items-center justify-center h-full text-slate-400 text-sm font-medium">No ledger entries.</div>
+                ) : (
+                  <table className="w-full text-left border-collapse">
+                    <thead className="bg-slate-50 sticky top-0 shadow-sm z-10">
                       <tr>
-                        <th>Date</th>
-                        <th>Desc</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Type</th>
-                        <th></th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Date & Desc</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Category</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Amount</th>
+                        <th className="px-8 py-4"></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-slate-100">
                       {transactions.map((tx) => (
-                        <tr key={tx.id}>
-                          <td>{tx.date}</td>
-                          <td>{tx.description}</td>
-                          <td>{tx.category}</td>
-                          <td style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>${tx.amount.toFixed(2)}</td>
-                          <td>
-                            <span className={`badge badge-${tx.type}`}>{tx.type}</span>
+                        <tr key={tx.id} className="hover:bg-slate-50 transition-colors group">
+                          <td className="px-8 py-5">
+                            <div className="text-sm font-bold text-slate-900">{tx.description}</div>
+                            <div className="text-xs text-slate-500 mt-1 font-medium">{tx.date}</div>
                           </td>
-                          <td style={{ textAlign: 'right' }}>
-                            <button onClick={() => deleteTransaction(tx.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
+                          <td className="px-8 py-5">
+                            <span className="px-3 py-1 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 tracking-widest uppercase">{tx.category}</span>
+                          </td>
+                          <td className={`px-8 py-5 text-right text-[15px] font-extrabold tabular-nums tracking-tight ${tx.type === 'expense' ? 'text-slate-900' : 'text-emerald-500'}`}>
+                            {tx.type === 'expense' ? '-' : '+'}${tx.amount.toFixed(2)}
+                          </td>
+                          <td className="px-8 py-5 text-right">
+                            <button onClick={() => deleteTransaction(tx.id)} className="text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100">
                               <TrashIcon />
                             </button>
                           </td>
@@ -902,279 +893,294 @@ export default function App() {
                       ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )}
 
         {activeTab === 'budgets' && (
-          <div className="content-grid">
-            {/* Create Budget */}
-            <div className="glass-panel">
-              <div className="panel-title">Set Category Limit</div>
-              <form onSubmit={saveBudget}>
-                <div className="form-group">
-                  <label className="form-label">Category</label>
-                  <select
-                    className="input-field"
-                    value={newBudget.category}
-                    onChange={(e) => setNewBudget({ ...newBudget, category: e.target.value })}
-                  >
-                    <option value="Housing">Housing</option>
-                    <option value="Groceries">Groceries</option>
-                    <option value="Dining Out">Dining Out</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Subscriptions">Subscriptions</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Shopping">Shopping</option>
-                  </select>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sticky top-8">
+                  <div className="text-lg font-extrabold text-slate-900 mb-6 tracking-tight">Define Category Limit</div>
+                  <form onSubmit={saveBudget} className="space-y-5">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Category</label>
+                      <select className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={newBudget.category} onChange={(e) => setNewBudget({ ...newBudget, category: e.target.value })}>
+                        <option value="Housing">Housing</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Dining Out">Dining Out</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Subscriptions">Subscriptions</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Shopping">Shopping</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Monthly Limit ($)</label>
+                      <input type="number" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" placeholder="500" value={newBudget.limit_amount} onChange={(e) => setNewBudget({ ...newBudget, limit_amount: e.target.value })} required />
+                    </div>
+                    <button type="submit" className="w-full bg-slate-900 text-white rounded-lg px-4 py-3 text-sm font-bold tracking-wide hover:bg-slate-800 transition-colors shadow-sm mt-4">Save Budget</button>
+                  </form>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Monthly Limit ($)</label>
-                  <input
-                    type="number"
-                    className="input-field"
-                    placeholder="500"
-                    value={newBudget.limit_amount}
-                    onChange={(e) => setNewBudget({ ...newBudget, limit_amount: e.target.value })}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Define Budget</button>
-              </form>
-            </div>
+              </div>
 
-            {/* List Budgets */}
-            <div className="glass-panel">
-              <div className="panel-title">Active Budgets</div>
-              {budgets.length === 0 ? (
-                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>No active budgets defined.</p>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
-                  {budgets.map((b) => {
-                    const spent = b.spent_amount || 0;
-                    const pct = Math.min(100, (spent / b.limit_amount) * 100);
-                    return (
-                      <div key={b.id} style={{ width: '100%', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '16px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontWeight: '600', fontSize: '14.5px' }}>{b.category}</span>
-                          <button onClick={() => deleteBudget(b.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
-                            <TrashIcon />
-                          </button>
-                        </div>
-                        <div className="progress-container">
-                          <div className="progress-label">
-                            <span>Spent: ${spent.toFixed(2)} / limit: ${b.limit_amount.toFixed(2)}</span>
-                            <span>{pct.toFixed(0)}%</span>
-                          </div>
-                          <div className="progress-bar-bg">
-                            <div className="progress-bar-fill" style={{ 
-                              width: `${pct}%`,
-                              background: pct >= 100 ? 'var(--gradient-danger)' : pct >= 80 ? 'var(--gradient-warning)' : 'var(--gradient-success)'
-                            }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+              <div className="lg:col-span-3">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="text-lg font-extrabold text-slate-900 tracking-tight">Active Budgets</div>
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{budgets.length} {'monitored'}</div>
                 </div>
-              )}
+                {budgets.length === 0 ? (
+                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-16 flex flex-col items-center justify-center text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-6">
+                      <BudgetsIcon />
+                    </div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-2">No Budgets Configured</h3>
+                    <p className="text-sm text-slate-500 max-w-sm leading-relaxed">Create category spending limits to monitor your outflows and maintain financial discipline.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {budgets.map((b) => {
+                      const spent = b.spent_amount || 0;
+                      const pct = Math.min(100, (spent / b.limit_amount) * 100);
+                      const isOver = pct >= 100;
+                      const isWarning = pct >= 80 && !isOver;
+                      const remaining = Math.max(0, b.limit_amount - spent);
+                      return (
+                        <div key={b.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+                          <div className={`h-1.5 w-full ${isOver ? 'bg-rose-500' : isWarning ? 'bg-amber-400' : 'bg-emerald-500'}`} />
+                          <div className="p-6">
+                            <div className="flex justify-between items-start mb-5">
+                              <div>
+                                <div className="text-lg font-extrabold text-slate-900">{b.category}</div>
+                                <div className="text-[11px] text-slate-400 mt-1 font-bold uppercase tracking-widest">
+                                  {isOver ? 'Over Budget' : isWarning ? 'Approaching Limit' : 'On Track'}
+                                </div>
+                              </div>
+                              <button onClick={() => deleteBudget(b.id)} className="text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-slate-50">
+                                <TrashIcon />
+                              </button>
+                            </div>
+                            <div className="flex items-baseline gap-2 mb-5">
+                              <span className="text-3xl font-extrabold text-slate-900 tabular-nums tracking-tight">{'$'}{remaining.toFixed(0)}</span>
+                              <span className="text-sm text-slate-400 font-semibold">remaining</span>
+                            </div>
+                            <div>
+                              <div className="flex justify-between items-end mb-2">
+                                <span className="text-[10px] font-bold text-slate-400 tabular-nums uppercase tracking-wider">{'$'}{spent.toFixed(0)} / {'$'}{b.limit_amount.toFixed(0)}</span>
+                                <span className={`text-sm font-extrabold tabular-nums ${isOver ? 'text-rose-600' : isWarning ? 'text-amber-500' : 'text-emerald-500'}`}>{pct.toFixed(0)}%</span>
+                              </div>
+                              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-700 ease-out ${isOver ? 'bg-rose-500' : isWarning ? 'bg-amber-400' : 'bg-emerald-500'}`} style={{ width: `${pct}%` }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
 
         {activeTab === 'goals' && (
-          <div className="content-grid">
-            {/* Create Goal */}
-            <div className="glass-panel">
-              <div className="panel-title">Create Goal Target</div>
-              <form onSubmit={addGoal}>
-                <div className="form-group">
-                  <label className="form-label">Goal Name</label>
-                  <input
-                    type="text"
-                    className="input-field"
-                    placeholder="e.g. House Down Payment, Retirement"
-                    value={newGoal.name}
-                    onChange={(e) => setNewGoal({ ...newGoal, name: e.target.value })}
-                    required
-                  />
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sticky top-8">
+                  <div className="text-lg font-extrabold text-slate-900 mb-6 tracking-tight">Create Milestone</div>
+                  <form onSubmit={addGoal} className="space-y-5">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Goal Name</label>
+                      <input type="text" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" placeholder="e.g. House Down Payment" value={newGoal.name} onChange={(e) => setNewGoal({ ...newGoal, name: e.target.value })} required />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Target Amount ($)</label>
+                      <input type="number" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" placeholder="50000" value={newGoal.target_amount} onChange={(e) => setNewGoal({ ...newGoal, target_amount: e.target.value })} required />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Current Balance ($)</label>
+                      <input type="number" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" placeholder="5000" value={newGoal.current_amount} onChange={(e) => setNewGoal({ ...newGoal, current_amount: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Target Date</label>
+                      <input type="date" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={newGoal.target_date} onChange={(e) => setNewGoal({ ...newGoal, target_date: e.target.value })} required />
+                    </div>
+                    <button type="submit" className="w-full bg-slate-900 text-white rounded-lg px-4 py-3 text-sm font-bold tracking-wide hover:bg-slate-800 transition-colors shadow-sm mt-4">Save Target</button>
+                  </form>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Target Amount ($)</label>
-                  <input
-                    type="number"
-                    className="input-field"
-                    placeholder="50000"
-                    value={newGoal.target_amount}
-                    onChange={(e) => setNewGoal({ ...newGoal, target_amount: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Current Savings Balances ($)</label>
-                  <input
-                    type="number"
-                    className="input-field"
-                    placeholder="5000"
-                    value={newGoal.current_amount}
-                    onChange={(e) => setNewGoal({ ...newGoal, current_amount: e.target.value })}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Target Date</label>
-                  <input
-                    type="date"
-                    className="input-field"
-                    value={newGoal.target_date}
-                    onChange={(e) => setNewGoal({ ...newGoal, target_date: e.target.value })}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Set Wealth Target</button>
-              </form>
-            </div>
+              </div>
 
-            {/* List Goals */}
-            <div className="glass-panel">
-              <div className="panel-title">Goal Tracker</div>
-              {goals.length === 0 ? (
-                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '40px' }}>No financial goals active.</p>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
-                  {goals.map((g) => {
-                    const pct = Math.min(100, (g.current_amount / g.target_amount) * 100);
-                    return (
-                      <div key={g.id} style={{ background: 'var(--bg-dark)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontWeight: 'bold', fontSize: '15px', color: 'var(--text-primary)' }}>{g.name}</span>
-                          <div style={{ display: 'flex', gap: '12px' }}>
-                            <button onClick={() => {
-                              const amount = prompt('Enter new current balance:', g.current_amount);
-                              if (amount !== null) updateGoalProgress(g.id, amount);
-                            }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary)', fontSize: '12px', fontWeight: '600' }}>
-                              <EditIcon /> Update
-                            </button>
-                            <button onClick={() => deleteGoal(g.id)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                              <TrashIcon />
-                            </button>
-                          </div>
-                        </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', fontWeight: '500' }}>Target Date: {g.target_date}</div>
-                        <div className="progress-container">
-                          <div className="progress-label">
-                            <span>Saved: ${g.current_amount.toLocaleString()} / Target: ${g.target_amount.toLocaleString()}</span>
-                            <span>{pct.toFixed(0)}%</span>
-                          </div>
-                          <div className="progress-bar-bg">
-                            <div className="progress-bar-fill" style={{ width: `${pct}%` }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+              <div className="lg:col-span-3">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="text-lg font-extrabold text-slate-900 tracking-tight">Financial Milestones</div>
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{goals.length} {'targets'}</div>
                 </div>
-              )}
+                {goals.length === 0 ? (
+                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-16 flex flex-col items-center justify-center text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-6">
+                      <GoalsIcon />
+                    </div>
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-2">No Financial Goals Set</h3>
+                    <p className="text-sm text-slate-500 max-w-sm leading-relaxed">Define savings milestones to track your progress toward major financial objectives.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {goals.map((g) => {
+                      const pct = Math.min(100, (g.current_amount / g.target_amount) * 100);
+                      const remaining = g.target_amount - g.current_amount;
+                      const progressColor = pct >= 100 ? 'bg-emerald-500' : pct >= 60 ? 'bg-blue-500' : pct >= 30 ? 'bg-indigo-500' : 'bg-slate-400';
+                      return (
+                        <div key={g.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 group relative overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
+                          <div className={`h-1.5 w-full ${progressColor}`} />
+                          <div className="p-6 flex flex-col flex-1">
+                            <div className="flex justify-between items-start mb-4">
+                              <div className="flex-1 min-w-0 pr-2">
+                                <h3 className="text-lg font-extrabold text-slate-900 truncate">{g.name}</h3>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Due {g.target_date}</p>
+                              </div>
+                              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5 shrink-0">
+                                <button onClick={() => {
+                                  const amount = prompt('Enter new current balance:', g.current_amount);
+                                  if (amount !== null) updateGoalProgress(g.id, amount);
+                                }} className="text-slate-400 hover:text-slate-900 transition-colors bg-white rounded-full p-1.5 shadow-sm border border-slate-200">
+                                  <EditIcon />
+                                </button>
+                                <button onClick={() => deleteGoal(g.id)} className="text-slate-400 hover:text-rose-500 transition-colors bg-white rounded-full p-1.5 shadow-sm border border-slate-200">
+                                  <TrashIcon />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4 mb-5 mt-auto pt-4">
+                              <div className="relative w-14 h-14 shrink-0">
+                                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+                                  <circle cx="28" cy="28" r="24" fill="none" stroke="#E2E8F0" strokeWidth="4" />
+                                  <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray={`${pct * 1.508} 150.8`} strokeLinecap="round" className={pct >= 100 ? 'text-emerald-500' : pct >= 60 ? 'text-blue-500' : pct >= 30 ? 'text-indigo-500' : 'text-slate-400'} style={{ transition: 'stroke-dasharray 0.8s ease' }} />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <span className="text-[11px] font-extrabold text-slate-900 tabular-nums">{pct.toFixed(0)}%</span>
+                                </div>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-2xl font-extrabold text-slate-900 tabular-nums tracking-tight">{'$'}{g.current_amount.toLocaleString()}</div>
+                                <div className="text-[11px] text-slate-400 font-semibold tabular-nums mt-0.5">of {'$'}{g.target_amount.toLocaleString()} target</div>
+                              </div>
+                            </div>
+                            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                              <div className={`h-full rounded-full transition-all duration-700 ease-out ${progressColor}`} style={{ width: `${pct}%` }}></div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
 
         {activeTab === 'profile' && (
-          <div className="content-grid">
-            <div className="glass-panel">
-              <div className="panel-title">Asset Risk & Financial Profile</div>
-              <form onSubmit={saveProfile}>
-                <div className="form-group">
-                  <label className="form-label">Annual Baseline Income ($)</label>
-                  <input
-                    type="number"
-                    className="input-field"
-                    value={profile.annual_income}
-                    onChange={(e) => setProfile({ ...profile, annual_income: parseFloat(e.target.value) })}
-                    required
-                  />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+              <div className="text-lg font-extrabold text-slate-900 mb-8 tracking-tight">Risk & Strategy Profile</div>
+              <form onSubmit={saveProfile} className="space-y-6">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Annual Baseline Income ($)</label>
+                  <input type="number" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" value={profile.annual_income} onChange={(e) => setProfile({ ...profile, annual_income: parseFloat(e.target.value) })} required />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Risk Tolerance</label>
-                  <select
-                    className="input-field"
-                    value={profile.risk_tolerance}
-                    onChange={(e) => setProfile({ ...profile, risk_tolerance: e.target.value })}
-                  >
-                    <option value="Low">Low (Safety First, Capital Preservation)</option>
-                    <option value="Medium">Medium (Balanced Equity / Bonds Growth)</option>
-                    <option value="High">High (Growth Indexing, Crypto, Alternates)</option>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Risk Tolerance</label>
+                  <select className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={profile.risk_tolerance} onChange={(e) => setProfile({ ...profile, risk_tolerance: e.target.value })}>
+                    <option value="Low">Low (Capital Preservation)</option>
+                    <option value="Medium">Medium (Balanced Growth)</option>
+                    <option value="High">High (Aggressive Growth)</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Investment Experience Level</label>
-                  <select
-                    className="input-field"
-                    value={profile.investment_experience}
-                    onChange={(e) => setProfile({ ...profile, investment_experience: e.target.value })}
-                  >
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Investment Experience</label>
+                  <select className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm font-medium" value={profile.investment_experience} onChange={(e) => setProfile({ ...profile, investment_experience: e.target.value })}>
                     <option value="None">None (Beginner)</option>
-                    <option value="Basic">Basic (Familiar with stocks/ETFs)</option>
-                    <option value="Advanced">Advanced (Options, Real Estate, Complex Portfolios)</option>
+                    <option value="Basic">Basic (Equities/Bonds)</option>
+                    <option value="Advanced">Advanced (Options, Alts)</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Age</label>
-                  <input
-                    type="number"
-                    className="input-field"
-                    value={profile.age}
-                    onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) })}
-                    required
-                  />
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Age</label>
+                  <input type="number" className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:bg-white focus:ring-2 focus:ring-slate-900 outline-none transition-all text-sm tabular-nums font-bold" value={profile.age} onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) })} required />
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Update Risk Statistics</button>
+                <button type="submit" className="w-full bg-slate-900 text-white rounded-lg px-4 py-3.5 text-sm font-bold tracking-wide hover:bg-slate-800 transition-colors shadow-md mt-6">Save Profile Strategy</button>
               </form>
             </div>
             
-            <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px', textAlign: 'center' }}>
-              <span style={{ display: 'flex', marginBottom: '20px' }}><TrendingUpIcon /></span>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>Personalized Allocation Guidance</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', marginTop: '12px', lineHeight: '1.5' }}>
-                Your risk profile metrics feeds directly into our LangGraph investment advice engine. It adjusts the equity-to-bond ratio automatically depending on age and risk choice.
+            <div className="bg-slate-900 rounded-2xl shadow-floating p-12 flex flex-col justify-center items-center text-center text-white relative overflow-hidden border border-slate-800">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600 rounded-full mix-blend-screen filter blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-600 rounded-full mix-blend-screen filter blur-[80px] opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+              
+              <div className="bg-slate-800/50 p-4 rounded-2xl mb-8 backdrop-blur-sm border border-slate-700">
+                 <span className="text-white"><TrendingUpIcon /></span>
+              </div>
+              <h3 className="text-3xl font-extrabold tracking-tight mb-4 relative z-10">Institutional Allocation</h3>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-sm relative z-10 font-medium">
+                Your profile parameters dictate the algorithmic allocation managed by the AuraWealth engine. Models dynamically balance risk vectors based on modern portfolio theory.
               </p>
             </div>
           </div>
         )}
       </main>
 
-      {/* Floating AI Chat Assistant Panel (Right Column) */}
-      <div className={`chat-drawer ${isChatOpen ? 'open' : ''}`}>
-        <div className="chat-header">
-          <h3><SparklesIcon /> Aura Wealth Advisor</h3>
-          <button className="chat-close" onClick={() => setIsChatOpen(false)}>✕</button>
+      {/* Floating AI Chat Assistant Panel */}
+      <div className={`fixed right-0 top-0 h-full w-[400px] bg-white shadow-2xl transform transition-transform duration-300 z-50 flex flex-col ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white">
+          <h3 className="font-extrabold text-slate-900 flex items-center gap-3 text-base tracking-tight"><SparklesIcon /> Private Advisor AI</h3>
+          <button className="text-slate-400 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-50" onClick={() => setIsChatOpen(false)}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
         </div>
 
-        <div className="chat-messages">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50">
           {chatMessages.map((msg, index) => (
-            <div key={index} className={`chat-bubble ${msg.sender}`}>
-              {msg.text}
+            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[85%] px-5 py-3.5 text-sm font-medium leading-relaxed shadow-sm ${msg.sender === 'user' ? 'bg-slate-900 text-white rounded-2xl rounded-br-sm' : 'bg-white text-slate-800 rounded-2xl rounded-bl-sm border border-slate-200'}`}>
+                {msg.text}
+              </div>
             </div>
           ))}
           {isChatLoading && (
-            <div className="chat-bubble ai" style={{ opacity: 0.6 }}>
-              Advisor is calculating allocations...
+            <div className="flex justify-start">
+              <div className="max-w-[85%] rounded-2xl px-5 py-4 text-sm bg-white text-slate-500 rounded-bl-sm border border-slate-200 flex gap-1.5 items-center shadow-sm">
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+              </div>
             </div>
           )}
         </div>
 
-        <form className="chat-input-container" onSubmit={sendChatMessage}>
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Ask about budgets, portfolios, savings velocity..."
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-          />
-          <button type="submit" className="btn btn-primary" style={{ padding: '10px 14px' }}>Send</button>
+        <form className="p-5 border-t border-slate-200 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]" onSubmit={sendChatMessage}>
+          <div className="relative">
+            <input
+              type="text"
+              className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl pl-5 pr-14 py-4 focus:bg-white focus:ring-2 focus:ring-slate-900 focus:border-slate-900 outline-none transition-all text-sm font-medium shadow-inner"
+              placeholder="Query your advisor..."
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+            />
+            <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-900 text-white rounded-lg w-10 flex items-center justify-center hover:bg-slate-800 transition-colors shadow-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </button>
+          </div>
         </form>
       </div>
+      
+      {/* Overlay */}
+      {isChatOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden" onClick={() => setIsChatOpen(false)}></div>
+      )}
     </div>
   );
 }
